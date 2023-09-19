@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-python cap_tokens.py
+python -m scripts.cap_tokens
