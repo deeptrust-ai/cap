@@ -8,7 +8,5 @@ api_secret = os.environ.get("TWITTER_API_SECRET")
 
 bearer_token = os.environ.get("TWITTER_BEARER_TOKEN")
 
-client_id = os.environ.get("CLIENT_ID")
-client_secret = os.environ.get("CLIENT_SECRET")
-
-cap_token = os.environ.get("CAP_ACCESS_TOKEN")
+access_token = os.environ.get("TWITTER_ACCESS_TOKEN")
+access_secret = os.environ.get("TWITTER_ACCESS_SECRET")
