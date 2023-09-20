@@ -1,7 +1,7 @@
-# cap
+# 🧢 cap
 
 Cap Or Not twitter bot
 
-<!-- 1. Get tagged
-2. On tag, launch job (use rn API), and start poller
-3. Poller creates tweet if captures finished job within time limit. -->
+🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢
+🧢 Don't be fooled by cap. Let the liars know it's a wrap. 🧢
+🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢🧢
