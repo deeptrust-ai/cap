@@ -13,7 +13,7 @@ class CapClient:
     def tweet(self, text, **args):
         return self.client.create_tweet(text=text, **args)
     
-    def get_tweet(self, id, **args):
+    def get_tweet(self, id, **args) -> tweepy.Response:
         return self.client.get_tweet(id=id, expansions=EXPANSIONS, media_fields=MEDIA_FIELDS, **args)
 
     def get_mentions(self, **args):
@@ -22,19 +22,22 @@ class CapClient:
 
         if not found_mentions: return mentions
 
+        # check each Mention for a valid, referenced tweet
         for mention in found_mentions:
             if mention.referenced_tweets:
-                for rtweet in mention.referenced_tweets:
-                    if self._is_valid_tweet(rtweet):
-                        tweet = self.get_tweet(rtweet.id)
-                        mentions.append(dict(mention=mention, parent_tweet=tweet))
+                for ref_tweet in mention.referenced_tweets:
+                    # referenced_tweets is an array, but is typially one item
+                    if ref_tweet.type == 'replied_to':
+                        tweet_response = self.get_tweet(ref_tweet.id)
+                        if self._is_valid_tweet(tweet_response):
+                            mentions.append(dict(mention=mention, parent_tweet=tweet_response))
 
         return mentions
 
-    def _is_valid_tweet(self, tweet):
-        return tweet.type == 'replied_to'
+    def _is_valid_tweet(self, tweet) -> bool:
+        return any([m.type == "video" for m in tweet.includes["media"]])
     
-    def _get_user_mentions(self, **args):
+    def _get_user_mentions(self, **args) -> tweepy.Response:
         return self.client.get_users_mentions(id=self.me.id, expansions=EXPANSIONS, media_fields=MEDIA_FIELDS, **args)
 
 
