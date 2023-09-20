@@ -17,15 +17,15 @@ class CapClient:
         self.client = get_client()
         self.me = self.client.get_me().data
 
-    def tweet(self, text, **args):
-        return self.client.create_tweet(text=text, **args)
+    def tweet(self, text, **kwargs):
+        return self.client.create_tweet(text=text, **kwargs)
     
-    def get_tweet(self, id, **args) -> tweepy.Response:
-        return self.client.get_tweet(id=id, expansions=EXPANSIONS, media_fields=MEDIA_FIELDS, **args)
+    def get_tweet(self, id, **kwargs) -> tweepy.Response:
+        return self.client.get_tweet(id=id, expansions=EXPANSIONS, media_fields=MEDIA_FIELDS, **kwargs)
 
-    def get_mentions(self, **args) -> typing.List[ValidMention]:
+    def get_mentions(self, **kwargs) -> typing.List[ValidMention]:
         mentions: typing.List[ValidMention] = []
-        found_mentions = self._get_user_mentions(**args).data
+        found_mentions = self._get_user_mentions(**kwargs).data
 
         if not found_mentions: return mentions
 
@@ -45,8 +45,8 @@ class CapClient:
     def _is_valid_tweet(self, tweet) -> bool:
         return any([m.type == "video" for m in tweet.includes["media"]])
     
-    def _get_user_mentions(self, **args) -> tweepy.Response:
-        return self.client.get_users_mentions(id=self.me.id, expansions=EXPANSIONS, media_fields=MEDIA_FIELDS, **args)
+    def _get_user_mentions(self, **kwargs) -> tweepy.Response:
+        return self.client.get_users_mentions(id=self.me.id, expansions=EXPANSIONS, media_fields=MEDIA_FIELDS, **kwargs)
 
 
 
