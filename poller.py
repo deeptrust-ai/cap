@@ -1,13 +1,11 @@
-from dotenv import load_dotenv
-
-load_dotenv()
-
-import os
 import logging
-from typing import Any, List
-from uuid import uuid1
 
-from modal import gpu, Image, Mount, Secret, Stub, asgi_app
+from modal import functions, Image, Stub, Secret
+
+from cap import CapClient
+
+class ScorelessException(Exception):
+    pass
 
 
 image = (
@@ -22,7 +20,24 @@ stub = Stub(
     ),
 )
 
-@stub.function(gpu="any", retries=3)
-def poller():
-    # add poller here
-    pass
+@stub.function()
+async def poller(id: str):
+    logging.info("Capper poller starting...")
+    cap = CapClient()
+
+    print(f"Getting results for job(id={id})...")
+    function_call = functions.FunctionCall.from_id(id)
+
+    try:
+        result = function_call.get(timeout=60 * 5)
+    except TimeoutError as e:
+        logging.error(f"Polling job (id={id}) has timed out.")
+        raise e
+    
+    # TODO: Add tweet
+    print(f"Job (id={id}) completed with this result: {result}")
+    scores = result.get("scores")
+    if not scores:
+        raise ScorelessException(f"Job (id={id}) returned empty scores.")
+        
+    cap.tweet(text=f"Job completed -- {','.join([score for score in scores])}")
