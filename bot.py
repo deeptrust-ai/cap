@@ -19,9 +19,7 @@ start_time = datetime.now()
 while True:
     # Get the mentions for your bot's user ID.
     logging.info(f"Getting mentions starting from time ({start_time})")
-    mentions = cap.get_mentions(
-        start_time=start_time
-    )
+    mentions = cap.get_mentions(start_time=start_time)
     
     for mention in mentions:
         launch_job(mention)
