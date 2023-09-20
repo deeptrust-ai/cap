@@ -1,9 +1,16 @@
+from dataclasses import dataclass
+import typing
 import tweepy
 
 import config
 
 EXPANSIONS = ["referenced_tweets.id", "attachments.media_keys"]
 MEDIA_FIELDS = ["url", "duration_ms", "variants"]
+
+@dataclass
+class ValidMention:
+    mention: typing.Any
+    parent_tweet: typing.Any
 
 class CapClient:
     def __init__(self) -> None:
@@ -16,8 +23,8 @@ class CapClient:
     def get_tweet(self, id, **args) -> tweepy.Response:
         return self.client.get_tweet(id=id, expansions=EXPANSIONS, media_fields=MEDIA_FIELDS, **args)
 
-    def get_mentions(self, **args):
-        mentions = []
+    def get_mentions(self, **args) -> typing.List[ValidMention]:
+        mentions: typing.List[ValidMention] = []
         found_mentions = self._get_user_mentions(**args).data
 
         if not found_mentions: return mentions
@@ -30,7 +37,8 @@ class CapClient:
                     if ref_tweet.type == 'replied_to':
                         tweet_response = self.get_tweet(ref_tweet.id)
                         if self._is_valid_tweet(tweet_response):
-                            mentions.append(dict(mention=mention, parent_tweet=tweet_response))
+                            valid: ValidMention = dict(mention=mention, parent_tweet=tweet_response)
+                            mentions.append(valid)
 
         return mentions
 
