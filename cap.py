@@ -2,6 +2,9 @@ import tweepy
 
 import config
 
+EXPANSIONS = ["referenced_tweets.id", "attachments.media_keys"]
+MEDIA_FIELDS = ["url", "duration_ms", "variants"]
+
 class CapClient:
     def __init__(self) -> None:
         self.client = get_client()
@@ -10,21 +13,29 @@ class CapClient:
     def tweet(self, text, **args):
         return self.client.create_tweet(text=text, **args)
     
+    def get_tweet(self, id, **args):
+        return self.client.get_tweet(id=id, expansions=EXPANSIONS, media_fields=MEDIA_FIELDS, **args)
+
     def get_mentions(self, **args):
         mentions = []
-        found_mentions = self.client.get_users_mentions(id=self.me.id, expansions=["referenced_tweets.id"], **args).data
+        found_mentions = self._get_user_mentions(**args).data
 
-        if found_mentions:
-            # print(f"found: {found_mentions}")
-            for mention in found_mentions:
-                print(f"men: {mention}")
-                if mention.referenced_tweets:
-                    mentions.append([mention for tweet in mention.referenced_tweets if self._is_valid_tweet(tweet)])
+        if not found_mentions: return mentions
+
+        for mention in found_mentions:
+            if mention.referenced_tweets:
+                for rtweet in mention.referenced_tweets:
+                    if self._is_valid_tweet(rtweet):
+                        tweet = self.get_tweet(rtweet.id)
+                        mentions.append(dict(mention=mention, parent_tweet=tweet))
 
         return mentions
 
     def _is_valid_tweet(self, tweet):
         return tweet.type == 'replied_to'
+    
+    def _get_user_mentions(self, **args):
+        return self.client.get_users_mentions(id=self.me.id, expansions=EXPANSIONS, media_fields=MEDIA_FIELDS, **args)
 
 
 
