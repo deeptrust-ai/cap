@@ -7,6 +7,7 @@ import config
 EXPANSIONS = ["referenced_tweets.id", "attachments.media_keys"]
 MEDIA_FIELDS = ["url", "duration_ms", "variants"]
 
+# TODO: Rename ValidMention
 @dataclass
 class ValidMention:
     mention: typing.Any
