@@ -38,7 +38,7 @@ class CapClient:
                     if ref_tweet.type == 'replied_to':
                         tweet_response = self.get_tweet(ref_tweet.id)
                         if self._is_valid_tweet(tweet_response):
-                            valid: ValidMention = dict(mention=mention, parent_tweet=tweet_response)
+                            valid: ValidMention = ValidMention(mention=mention, parent_tweet=tweet_response)
                             mentions.append(valid)
 
         return mentions
