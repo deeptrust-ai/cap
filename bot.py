@@ -3,6 +3,7 @@ import logging
 import time
 
 from modal import Function
+from tweepy.errors import TooManyRequests
 
 from cap import CapClient, ValidMention
 
@@ -14,7 +15,6 @@ logging.info("Capper Checker starting...")
 
 def launch_job(mention: ValidMention) -> None:
     # will launch a modal job to fact check tweet (API request)
-    # TODO: Deploy changes to modal
     logging.info(f"Launching twitter predict job for mention(id={mention.mention.id})...")
     twitter_predict = Function.lookup("rawnet-predict-jobs", "twitter_predict")
     parent_tweet = mention.parent_tweet.data
@@ -31,11 +31,21 @@ start_time = datetime.now()
 while True:
     # Get the mentions for your bot's user ID.
     logging.info(f"Getting mentions starting from time ({start_time})")
-    # TODO: Fix start_time
-    mentions = cap.get_mentions(start_time=start_time)
+
+    try:
+        mentions = cap.get_mentions(start_time=start_time)
+    except TooManyRequests:
+        sleep_time = 60 * 5 # five minutes
+        logging.error(f"TooManyRequests thrown. Sleeping for {sleep_time}s.")
+
+        time.sleep(sleep_time)
+        continue
     
-    # for mention in mentions:
-        # launch_job(mention)
+    logging.info(f"Found {len(mentions)} valid mentions. Launching jobs...")
+    
+    for mention in mentions:
+        # TODO: Test launch job
+        launch_job(mention)
     
     # update start time
     start_time = datetime.now()
