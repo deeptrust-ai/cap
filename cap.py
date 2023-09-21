@@ -44,7 +44,11 @@ class CapClient:
         return mentions
 
     def _is_valid_tweet(self, tweet) -> bool:
-        return any([m.type == "video" for m in tweet.includes["media"]])
+        media = tweet.includes.get("media")
+
+        if not media: return False
+
+        return any([m.type == "video" for m in media])
     
     def _get_user_mentions(self, **kwargs) -> tweepy.Response:
         return self.client.get_users_mentions(id=self.me.id, expansions=EXPANSIONS, media_fields=MEDIA_FIELDS, **kwargs)
