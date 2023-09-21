@@ -40,4 +40,4 @@ async def poller(id: str):
     if not scores:
         raise ScorelessException(f"Job (id={id}) returned empty scores.")
         
-    cap.tweet(text=f"Job completed -- {','.join([score for score in scores])}")
+    cap.tweet(text=f"Job completed -- {','.join(map(str, scores))}")
