@@ -28,20 +28,20 @@ async def poller(id: str, parent_tweet_id):
     logging.info("Capper poller starting...")
     cap = CapClient()
 
-    logging.info(f"Getting results for job(id={id})...")
+    logging.info(f"Getting results for job(id={id}, parent_tweet_id={parent_tweet_id})...")
     function_call = functions.FunctionCall.from_id(id)
 
     try:
         result = function_call.get(timeout=60 * 5)
     except TimeoutError as e:
-        logging.error(f"Polling job (id={id}) has timed out.")
+        logging.error(f"Polling job(id={id}, parent_tweet_id={parent_tweet_id}) has timed out.")
         raise e
     
     # TODO: Add tweet
-    logging.info(f"Job (id={id}) completed with this result: {result}")
+    logging.info(f"Job(id={id}, parent_tweet_id={parent_tweet_id}) completed with this result: {result}")
     scores = result.get("scores")
     if not scores:
-        raise ScorelessException(f"Job (id={id}) returned empty scores.")
+        raise ScorelessException(f"Job(id={id}, parent_tweet_id={parent_tweet_id}) returned empty scores.")
 
-    logging.info(f"Job (id={id}) posting to twitter...")    
+    logging.info(f"Job(id={id}, parent_tweet_id={parent_tweet_id}) posting to twitter...")    
     cap.tweet(text=f"Job completed -- {','.join(map(str, scores))}", in_reply_to_tweet_id=parent_tweet_id)
