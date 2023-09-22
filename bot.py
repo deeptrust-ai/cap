@@ -1,6 +1,7 @@
 from datetime import datetime
 import logging
 import time
+import os
 
 from modal import Function
 from tweepy.errors import TooManyRequests
@@ -9,6 +10,8 @@ from cap import CapClient, ValidMention
 
 FORMAT = '%(asctime)s: %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.INFO)
+
+SLEEP_TIME = int(os.environ.get("SLEEP_TIME", "30"))
 
 cap = CapClient()
 logging.info("Capper Checker starting...")
@@ -35,7 +38,7 @@ while True:
     try:
         mentions = cap.get_mentions(start_time=start_time)
     except TooManyRequests:
-        sleep_time = 60 * 5 # five minutes
+        sleep_time = SLEEP_TIME * 10
         logging.error(f"TooManyRequests thrown. Sleeping for {sleep_time}s.")
 
         time.sleep(sleep_time)
@@ -51,7 +54,7 @@ while True:
     start_time = datetime.now()
 
     # sleep
-    logging.info("sleep...")
-    time.sleep(30)
+    logging.info(f"Sleeping for {SLEEP_TIME}s...")
+    time.sleep(SLEEP_TIME)
 
     
