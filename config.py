@@ -10,3 +10,6 @@ bearer_token = os.environ.get("TWITTER_BEARER_TOKEN")
 
 access_token = os.environ.get("TWITTER_ACCESS_TOKEN")
 access_secret = os.environ.get("TWITTER_ACCESS_SECRET")
+
+client_id = os.environ.get("TWITTER_CLIENT_ID")
+client_secret = os.environ.get("TWITTER_CLIENT_SECRET")
