@@ -24,7 +24,7 @@ def launch_job(mention: ValidMention) -> None:
     # launch a poller job to update with tweet (modal function launch)
     logging.info("Launching poller...")
     poller = Function.lookup("cap-poller", "poller")
-    poller.spawn(job_id)
+    poller.spawn(job_id, parent_tweet.id)
 
 
 start_time = datetime.now()

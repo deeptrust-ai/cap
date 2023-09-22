@@ -4,6 +4,9 @@ from modal import functions, Image, Stub, Secret
 
 from cap import CapClient
 
+FORMAT = '%(asctime)s: %(message)s'
+logging.basicConfig(format=FORMAT, level=logging.INFO)
+
 class ScorelessException(Exception):
     pass
 
@@ -21,11 +24,11 @@ stub = Stub(
 )
 
 @stub.function()
-async def poller(id: str):
+async def poller(id: str, parent_tweet_id):
     logging.info("Capper poller starting...")
     cap = CapClient()
 
-    print(f"Getting results for job(id={id})...")
+    logging.info(f"Getting results for job(id={id})...")
     function_call = functions.FunctionCall.from_id(id)
 
     try:
@@ -35,9 +38,10 @@ async def poller(id: str):
         raise e
     
     # TODO: Add tweet
-    print(f"Job (id={id}) completed with this result: {result}")
+    logging.info(f"Job (id={id}) completed with this result: {result}")
     scores = result.get("scores")
     if not scores:
         raise ScorelessException(f"Job (id={id}) returned empty scores.")
-        
-    cap.tweet(text=f"Job completed -- {','.join(map(str, scores))}")
+
+    logging.info(f"Job (id={id}) posting to twitter...")    
+    cap.tweet(text=f"Job completed -- {','.join(map(str, scores))}", in_reply_to_tweet_id=parent_tweet_id)
