@@ -24,7 +24,7 @@ stub = Stub(
 )
 
 @stub.function()
-async def poller(id: str, parent_tweet_id):
+async def poller(id: str, parent_tweet_id: int):
     logging.info("Capper poller starting...")
     cap = CapClient()
 
