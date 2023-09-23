@@ -25,7 +25,7 @@ def launch_job(mention: ValidMention) -> None:
     job_id = predict_job.object_id
 
     # launch a poller job to update with tweet (modal function launch)
-    logging.info("Launching poller...")
+    logging.info(f"Launching poller(job_id={job_id})...")
     poller = Function.lookup("cap-poller", "poller")
     poller.spawn(job_id, parent_tweet.id)
 
@@ -38,7 +38,7 @@ while True:
     try:
         mentions = cap.get_mentions(start_time=start_time)
     except TooManyRequests:
-        sleep_time = SLEEP_TIME * 10
+        sleep_time = SLEEP_TIME * 5
         logging.error(f"TooManyRequests thrown. Sleeping for {sleep_time}s.")
 
         time.sleep(sleep_time)
