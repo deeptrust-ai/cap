@@ -51,7 +51,7 @@ def _tweet(score: int):
 
     icon = "🟢"
     message = "DeepTrust Alpha did not detect generated speech. Yay! 🎉"
-    percent = score * 100
+    percent = round(score * 100, 2)
 
     if 50 <= percent <= 85:
         icon = "🟡"
