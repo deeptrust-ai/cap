@@ -1,1 +1,1 @@
-worker: python bot.py
+worker: SLEEP_TIME=60 python bot.py
