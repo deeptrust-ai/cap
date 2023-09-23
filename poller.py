@@ -24,27 +24,27 @@ stub = Stub(
 )
 
 @stub.function()
-async def poller(id: str, parent_tweet_id: int):
+async def poller(id: str, mention_tweet_id: int):
     logging.info("Capper poller starting...")
     cap = CapClient()
 
-    logging.info(f"Getting results for job(id={id}, parent_tweet_id={parent_tweet_id})...")
+    logging.info(f"Getting results for job(id={id}, mention_tweet_id={mention_tweet_id})...")
     function_call = functions.FunctionCall.from_id(id)
 
     try:
         result = function_call.get(timeout=60 * 5)
     except TimeoutError as e:
-        logging.error(f"Polling job(id={id}, parent_tweet_id={parent_tweet_id}) has timed out.")
+        logging.error(f"Polling job(id={id}, mention_tweet_id={mention_tweet_id}) has timed out.")
         raise e
     
     # TODO: Add tweet
-    logging.info(f"Job(id={id}, parent_tweet_id={parent_tweet_id}) completed with this result: {result}")
+    logging.info(f"Job(id={id}, mention_tweet_id={mention_tweet_id}) completed with this result: {result}")
     scores = result.get("scores")
     if not scores:
-        raise ScorelessException(f"Job(id={id}, parent_tweet_id={parent_tweet_id}) returned empty scores.")
+        raise ScorelessException(f"Job(id={id}, mention_tweet_id={mention_tweet_id}) returned empty scores.")
 
-    logging.info(f"Job(id={id}, parent_tweet_id={parent_tweet_id}) posting to twitter...")    
-    cap.tweet(text=_tweet(scores[0]), in_reply_to_tweet_id=parent_tweet_id)
+    logging.info(f"Job(id={id}, mention_tweet_id={mention_tweet_id}) posting to twitter...")    
+    cap.tweet(text=_tweet(scores[0]), in_reply_to_tweet_id=mention_tweet_id)
 
 
 def _tweet(score: int):

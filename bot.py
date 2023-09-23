@@ -20,6 +20,7 @@ def launch_job(mention: ValidMention) -> None:
     # will launch a modal job to fact check tweet (API request)
     logging.info(f"Launching twitter predict job for mention(id={mention.mention.id})...")
     twitter_predict = Function.lookup("rawnet-predict-jobs", "twitter_predict")
+    mention_tweet = mention.mention
     parent_tweet = mention.parent_tweet.data
     predict_job = twitter_predict.spawn(parent_tweet.id, "ss")
     job_id = predict_job.object_id
@@ -27,7 +28,7 @@ def launch_job(mention: ValidMention) -> None:
     # launch a poller job to update with tweet (modal function launch)
     logging.info(f"Launching poller(job_id={job_id})...")
     poller = Function.lookup("cap-poller", "poller")
-    poller.spawn(job_id, parent_tweet.id)
+    poller.spawn(job_id, mention_tweet.id)
 
 
 start_time = datetime.now()
