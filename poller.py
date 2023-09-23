@@ -65,6 +65,7 @@ def _tweet(score: int):
 
 Score: {icon} {percent}% {icon}
 {message}
+Disclaimer: DeepTrust Speech is in early alpha. Research is still undergoing. Results may vary.
 """
 
     return tweet.format(icon=icon, percent=percent, message=message)
