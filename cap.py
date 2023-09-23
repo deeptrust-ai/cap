@@ -17,6 +17,7 @@ class CapClient:
     def __init__(self) -> None:
         self.client = get_client()
         self.me = self.client.get_me().data
+        self.cache = []
 
     def tweet(self, text, **kwargs):
         return self.client.create_tweet(text=text, **kwargs)
@@ -40,6 +41,7 @@ class CapClient:
                         if self._is_valid_tweet(tweet_response):
                             valid: ValidMention = ValidMention(mention=mention, parent_tweet=tweet_response)
                             mentions.append(valid)
+                            self.cache.append(tweet_response.data.id)
 
         return mentions
 
@@ -47,6 +49,7 @@ class CapClient:
         media = tweet.includes.get("media")
 
         if not media: return False
+        if tweet.data.id in self.cache: return False
 
         return any([m.type == "video" for m in media])
     
