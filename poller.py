@@ -44,7 +44,7 @@ async def poller(id: str, parent_tweet_id: int):
         raise ScorelessException(f"Job(id={id}, parent_tweet_id={parent_tweet_id}) returned empty scores.")
 
     logging.info(f"Job(id={id}, parent_tweet_id={parent_tweet_id}) posting to twitter...")    
-    cap.tweet(text=f"Job completed -- {','.join(map(str, scores))}", in_reply_to_tweet_id=parent_tweet_id)
+    cap.tweet(text=_tweet(scores[0]), in_reply_to_tweet_id=parent_tweet_id)
 
 
 def _tweet(score: int):
