@@ -45,3 +45,26 @@ async def poller(id: str, parent_tweet_id: int):
 
     logging.info(f"Job(id={id}, parent_tweet_id={parent_tweet_id}) posting to twitter...")    
     cap.tweet(text=f"Job completed -- {','.join(map(str, scores))}", in_reply_to_tweet_id=parent_tweet_id)
+
+
+def _tweet(score: int):
+
+    icon = "🟢"
+    message = "DeepTrust Alpha did not detect generated speech. Yay! 🎉"
+    percent = score * 100
+
+    if 50 <= percent <= 85:
+        icon = "🟡"
+        message = "DeepTrust Alpha detects some traces that resemble generated speech. Tread carefully. 👀"
+    elif percent > 85:
+        icon = "🔴"
+        message = "🚨 CAPPER ALERT 🚨\nDeepTrust Alpha is certain there is generated speech. We detect a capper. 🧢 Run! 🏃‍♂️"
+
+
+    tweet =  """Speech Analysis Complete!
+
+Score: {icon} {percent}% {icon}
+{message}
+"""
+
+    return tweet.format(icon=icon, percent=percent, message=message)
