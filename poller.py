@@ -58,13 +58,14 @@ def _tweet(score: int):
         message = "DeepTrust Alpha detects some traces that resemble generated speech. Tread carefully. 👀"
     elif percent > 85:
         icon = "🔴"
-        message = "🚨 CAPPER ALERT 🚨\nDeepTrust Alpha is certain there is generated speech. We detect a capper. 🧢 Run! 🏃‍♂️"
+        message = "🚨 CAPPER ALERT 🚨\nDeepTrust Alpha is certain there is generated speech. We detect a capper. 🧢"
 
 
     tweet =  """Speech Analysis Complete!
 
-Score: {icon} {percent}% {icon}
+Score: {percent}% {icon}
 {message}
+============
 Disclaimer: DeepTrust Speech is in early alpha. Research is still undergoing. Results may vary.
 """
 
