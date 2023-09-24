@@ -16,6 +16,7 @@ class ValidMention:
 class CapClient:
     def __init__(self) -> None:
         self.client = get_client()
+        self.api = get_api()
         self.me = self.client.get_me().data
         self.cache = []
 
@@ -62,8 +63,7 @@ def get_client() -> tweepy.API:
     return tweepy.Client(config.bearer_token,  consumer_key=config.api_key, consumer_secret=config.api_secret, access_token=config.access_token, access_token_secret=config.access_secret)
 
 def get_api():
-    auth = tweepy.OAuthHandler(config.api_key, config.api_key)
-    auth.set_access_token(config.access_token, config.access_secret)
+    auth = tweepy.OAuth1UserHandler(config.api_key, config.api_secret, config.access_token, config.access_secret)
 
     api = tweepy.API(auth)
     
