@@ -18,7 +18,7 @@ def delete_heatmap():
     os.remove("heatmap.png")
 
 def _preprocess(data):
-    data = np.array(data)
+    data = np.array(data, dtype=np.float32)
     data = np.expand_dims(data, axis=0)
 
     return data
