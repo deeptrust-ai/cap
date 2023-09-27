@@ -1,8 +1,12 @@
 from dataclasses import dataclass
+import logging
 import typing
 import tweepy
 
 import config
+
+FORMAT = '%(asctime)s: %(message)s'
+logging.basicConfig(format=FORMAT, level=logging.INFO)
 
 EXPANSIONS = ["referenced_tweets.id", "attachments.media_keys"]
 MEDIA_FIELDS = ["url", "duration_ms", "variants"]
@@ -30,6 +34,8 @@ class CapClient:
         mentions: typing.List[ValidMention] = []
         found_mentions = self._get_user_mentions(**kwargs).data
 
+        logging.info(f"Found {len(found_mentions)} total mentions.")
+
         if not found_mentions: return mentions
 
         # check each Mention for a valid, referenced tweet
@@ -44,6 +50,8 @@ class CapClient:
                             mentions.append(valid)
                             self.cache.append(tweet_response.data.id)
 
+        logging.info(f"Found {len(mentions)} valid mentions.")
+        
         return mentions
 
     def _is_valid_tweet(self, tweet) -> bool:

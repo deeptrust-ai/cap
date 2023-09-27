@@ -44,9 +44,7 @@ while True:
 
         time.sleep(sleep_time)
         continue
-    
-    logging.info(f"Found {len(mentions)} valid mentions.")
-    
+        
     for mention in mentions:
         # TODO: Test launch job
         launch_job(mention)
