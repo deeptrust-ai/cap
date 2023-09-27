@@ -34,9 +34,9 @@ class CapClient:
         mentions: typing.List[ValidMention] = []
         found_mentions = self._get_user_mentions(**kwargs).data
 
-        logging.info(f"Found {len(found_mentions)} total mentions.")
-
         if not found_mentions: return mentions
+
+        logging.info(f"Found {len(found_mentions)} total mentions.")
 
         # check each Mention for a valid, referenced tweet
         for mention in found_mentions:
