@@ -9,7 +9,7 @@ def create_heatmap(data):
     plt.imshow(data, cmap='autumn_r', interpolation='nearest')
     plt.colorbar(label="Deepfake Speech Likelihood")
     plt.title("Deepfake Speech Heatmap")
-    plt.xlabel("Video Timeline (minutes)")
+    plt.xlabel("Video Timeline")
     plt.xticks([])
     plt.yticks([])
     plt.savefig('heatmap.png', bbox_inches='tight')
