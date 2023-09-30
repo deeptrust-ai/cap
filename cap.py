@@ -50,8 +50,10 @@ class CapClient:
                         if self._is_valid_tweet(tweet_response):
                             valid: ValidMention = ValidMention(mention=mention, parent_tweet=tweet_response)
                             mentions.append(valid)
-                            self.cache.append(mention.id)
 
+        # add mention to cache
+        self.cache += [m.id for m in mentions]
+        
         logging.info(f"Found {len(mentions)} valid mentions.")
         
         return mentions
