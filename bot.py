@@ -5,6 +5,7 @@ import os
 
 from modal import Function
 from tweepy.errors import TooManyRequests
+import pytz
 
 from cap import CapClient, ValidMention
 
@@ -31,7 +32,7 @@ def launch_job(mention: ValidMention) -> None:
     poller.spawn(job_id, mention_tweet.id)
 
 
-start_time = datetime.now()
+start_time = datetime.now(tz=pytz.utc)
 while True:
     # Get the mentions for your bot's user ID.
     logging.info(f"Getting mentions starting from time ({start_time})")
@@ -50,7 +51,7 @@ while True:
         launch_job(mention)
     
     # update start time
-    start_time = datetime.now()
+    start_time = datetime.now(tz=pytz.utc)
 
     # sleep
     logging.info(f"Sleeping for {SLEEP_TIME}s...")
