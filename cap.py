@@ -52,7 +52,7 @@ class CapClient:
                             mentions.append(valid)
 
         # add mention to cache
-        self.cache += [m.id for m in mentions]
+        self.cache += [m.mention.id for m in mentions]
         
         logging.info(f"Found {len(mentions)} valid mentions.")
         
