@@ -42,7 +42,7 @@ class CapClient:
 
         # check each Mention for a valid, referenced tweet
         for mention in found_mentions:
-            if mention.referenced_tweets:
+            if mention.referenced_tweets and mention.id not in self.cache:
                 for ref_tweet in mention.referenced_tweets:
                     # referenced_tweets is an array, but is typially one item
                     if ref_tweet.type == 'replied_to':
@@ -50,7 +50,7 @@ class CapClient:
                         if self._is_valid_tweet(tweet_response):
                             valid: ValidMention = ValidMention(mention=mention, parent_tweet=tweet_response)
                             mentions.append(valid)
-                            self.cache.append(tweet_response.data.id)
+                            self.cache.append(mention.id)
 
         logging.info(f"Found {len(mentions)} valid mentions.")
         
@@ -60,7 +60,6 @@ class CapClient:
         media = tweet.includes.get("media")
 
         if not media: return False
-        if tweet.data.id in self.cache: return False
 
         return any([m.type == "video" for m in media])
     
