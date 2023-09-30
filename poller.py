@@ -6,7 +6,7 @@ from modal import functions, Image, Stub, Secret
 from cap import CapClient
 from heatmap import create_heatmap, delete_heatmap
 
-DEFAULT_TIMEOUT=650
+DEFAULT_TIMEOUT=700
 
 FORMAT = '%(asctime)s: %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.INFO)
