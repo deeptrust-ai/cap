@@ -1,9 +1,12 @@
+from datetime import datetime
 import logging
 
 from modal import functions, Image, Stub, Secret
 
 from cap import CapClient
 from heatmap import create_heatmap, delete_heatmap
+
+DEFAULT_TIMEOUT=650
 
 FORMAT = '%(asctime)s: %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.INFO)
@@ -24,22 +27,22 @@ stub = Stub(
     ),
 )
 
-@stub.function()
+@stub.function(timeout=DEFAULT_TIMEOUT)
 async def poller(id: str, mention_tweet_id: int):
     logging.info("Capper poller starting...")
+    then = datetime.now()
     cap = CapClient()
 
     logging.info(f"Getting results for job(id={id}, mention_tweet_id={mention_tweet_id})...")
     function_call = functions.FunctionCall.from_id(id)
 
     try:
-        result = function_call.get(timeout=60 * 5)
+        result = function_call.get(timeout=DEFAULT_TIMEOUT)
     except TimeoutError as e:
         logging.error(f"Polling job(id={id}, mention_tweet_id={mention_tweet_id}) has timed out.")
         raise e
     
-    # TODO: Add tweet
-    logging.info(f"Job(id={id}, mention_tweet_id={mention_tweet_id}) completed with this result: {result}")
+    logging.info(f"Job(id={id}, mention_tweet_id={mention_tweet_id}, completion_length=({datetime.now() - then}s)) completed with this result:\n{result}")
     scores = result.get("scores")
     segmented_predictions = result.get("segmented_predictions")
     if not scores:
