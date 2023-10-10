@@ -58,6 +58,7 @@ async def poller(id: str, mention_tweet_id: int):
 
     
     cap.tweet(text=_tweet(scores[0]), in_reply_to_tweet_id=mention_tweet_id, media_ids=media_ids)
+    return
 
 
 def _tweet(score: int):
