@@ -8,14 +8,10 @@ def create_heatmap(data):
     """generate matplotlib heatmap of the segmented prediction output of the prediciton job 
     """
     # format xticks
-    if len(data) > 10:
-        end = len(data) - 1
-        mid = int(end/2)
-        xticks = [0, mid, end]
-        labels = [_to_date_string(x) for x in xticks]
-    else:
-        xticks = []
-        labels = []
+    end = len(data) - 1
+    mid = int(end/2)
+    xticks = [0, mid, end]
+    labels = [_to_date_string(x) for x in xticks]
 
 
     data = _preprocess(data)
