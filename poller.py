@@ -77,6 +77,7 @@ def _tweet(score: int):
 
     tweet =  """Speech Analysis Complete!
 
+{icon} {message}
 ============
 Disclaimer: DeepTrust Speech is in early alpha. Research is still undergoing. Results may vary.
 """
