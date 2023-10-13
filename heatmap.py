@@ -16,12 +16,13 @@ def create_heatmap(data):
 
     data = _preprocess(data)
 
-    plt.imshow(data, cmap='autumn_r', interpolation='nearest')
-    plt.colorbar(label="Deepfake Speech Likelihood")
-    plt.title("Deepfake Speech Heatmap\n(3 sec segments)")
+    plt.imshow(data, cmap='RdYlGn_r', interpolation='nearest')
+    plt.title("Deepfake Speech Heatmap")
+    
     plt.xlabel("Video Timeline")
     plt.xticks(xticks, labels)
     plt.yticks([])
+    # plt.colorbar(label="Key: Deepfake Speech Likelihood", orientation="horizontal", location="top")
     plt.savefig('heatmap.png', bbox_inches='tight')
 
 def delete_heatmap():
