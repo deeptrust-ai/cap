@@ -45,7 +45,7 @@ class CapClient:
             if mention.referenced_tweets and mention.id not in self.cache:
                 for ref_tweet in mention.referenced_tweets:
                     # referenced_tweets is an array, but is typially one item
-                    if ref_tweet.type == 'replied_to':
+                    if ref_tweet.type == "replied_to" or ref_tweet.type == "quoted":
                         tweet_response = self.get_tweet(ref_tweet.id)
                         if self._is_valid_tweet(tweet_response):
                             valid: ValidMention = ValidMention(mention=mention, parent_tweet=tweet_response)
