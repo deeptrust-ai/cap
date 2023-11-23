@@ -7,9 +7,9 @@ from modal import Function
 from tweepy.errors import TooManyRequests
 import pytz
 
-from cap import CapClient, ValidMention
+from cap import CapClient, CapType, ValidMention
 
-FORMAT = '%(asctime)s: %(message)s'
+FORMAT = "%(asctime)s: %(message)s"
 logging.basicConfig(format=FORMAT, level=logging.INFO)
 
 SLEEP_TIME = int(os.environ.get("SLEEP_TIME", "30"))
@@ -17,9 +17,12 @@ SLEEP_TIME = int(os.environ.get("SLEEP_TIME", "30"))
 cap = CapClient()
 logging.info("Capper Checker starting...")
 
-def launch_job(mention: ValidMention) -> None:
+
+def launch_deepfake_job(mention: ValidMention) -> None:
     # will launch a modal job to fact check tweet (API request)
-    logging.info(f"Launching twitter predict job for mention(id={mention.mention.id})...")
+    logging.info(
+        f"Launching twitter predict job for mention(id={mention.mention.id})..."
+    )
     twitter_predict = Function.lookup("rawnet-predict-jobs", "twitter_predict")
     mention_tweet = mention.mention
     parent_tweet = mention.parent_tweet.data
@@ -45,16 +48,22 @@ while True:
 
         time.sleep(sleep_time)
         continue
-        
+
     for mention in mentions:
-        # TODO: Test launch job
-        launch_job(mention)
-    
+        if mention.cap_type == CapType.DEEPFAKE:
+            print(
+                f"Starting deepfake job for mention(tweet_id={mention.mention.id})..."
+            )
+            launch_deepfake_job(mention)
+        elif mention.cap_type == CapType.FACTCHECK:
+            print(
+                f"Starting factcheck job for mention(tweet_id={mention.mention.id})..."
+            )
+            # TODO: Add factcheck job
+
     # update start time
     start_time = datetime.now(tz=pytz.utc)
 
     # sleep
     logging.info(f"Sleeping for {SLEEP_TIME}s...")
     time.sleep(SLEEP_TIME)
-
-    
