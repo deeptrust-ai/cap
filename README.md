@@ -1,6 +1,12 @@
-# 🧢 cap
+# 🧢 cap - Cap Or Not Twitter Bot
 
-Cap Or Not Twitter Bot
+[Twitter Page](https://twitter.com/capornot_)
+
+# How To Use
+
+Simply find a tweet you want to "cap-check" and tag the bot. Make sure you refer to [CLF Rules](#command-line-formatting) to properly activate the cap-check bot.
+
+[![](https://i.imgur.com/C4TqGaf.jpg)](https://twitter.com/amanmibra/status/1722365993308262645)
 
 ## Command Line Formatting
 
