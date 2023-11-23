@@ -1,21 +1,35 @@
 from dataclasses import dataclass
+from enum import Enum
 import logging
 import typing
 import tweepy
 
 import config
 
-FORMAT = '%(asctime)s: %(message)s'
+FORMAT = "%(asctime)s: %(message)s"
 logging.basicConfig(format=FORMAT, level=logging.INFO)
 
 EXPANSIONS = ["referenced_tweets.id", "attachments.media_keys"]
 MEDIA_FIELDS = ["url", "duration_ms", "variants"]
 
-# TODO: Rename ValidMention
+CAP_HANDLE = "@capornot_"
+
+
+class CapType(Enum):
+    DEEPFAKE = "deepfake"
+    FACTCHECK = "factcheck"
+
+    @classmethod
+    def has_value(cls, value):
+        return value in cls._value2member_map_
+
+
 @dataclass
 class ValidMention:
     mention: typing.Any
     parent_tweet: typing.Any
+    capType: CapType
+
 
 class CapClient:
     def __init__(self) -> None:
