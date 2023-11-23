@@ -84,9 +84,12 @@ class CapClient:
     def _get_cap_type(self, tweet) -> typing.Optional[CapType]:
         """Checks if the text of the tweet is parsed correctly and has a cap job type."""
         # Check for CapType
-        cap_command_line = tweet.split(" ")
-        if cap_command_line[0].lower() != CAP_HANDLE.lower():
+        tweet = tweet.lower()
+        if CAP_HANDLE not in tweet:
             return None
+
+        tweet = tweet.split(" ")
+        cap_command_line = tweet[tweet.index(CAP_HANDLE) :]
 
         cap_type = cap_command_line[1]
 
