@@ -20,6 +20,7 @@ logging.info("Capper Checker starting...")
 
 def launch_deepfake_job(mention: ValidMention) -> None:
     # will launch a modal job to fact check tweet (API request)
+    # TODO: Use api to launch tweet job
     logging.info(
         f"Launching twitter predict job for mention(id={mention.mention.id})..."
     )
