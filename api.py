@@ -22,9 +22,10 @@ def twitter_transcribe(tweet_url: str):
 
     return result.get('output')
 
-def verity(text: str):
+def verity(tweet_id: str, text: str):
     request_url = api_url + "/verity/text"
-    body = dict(transcription=text)
+
+    body = dict(tweet_id=tweet_id, transcription=text)
 
     result = requests.post(request_url, json=body).json()
 
@@ -32,12 +33,12 @@ def verity(text: str):
 
 if __name__ == "__main__":
     # print(health_check())
-    example_tweet = "https://twitter.com/amanmibra/status/1727051006054420532"
+    example_tweet = "https://twitter.com/ReallyAmerican1/status/1730003138084483219"
 
     print("Transcribing...")
     transcription = twitter_transcribe(example_tweet)
     print(f"Transcription Result: {transcription}\n----------")
     print("Fact checking...")
-    fact_check = verity(transcription)
+    fact_check = verity('1730003138084483219', transcription)
 
     print(f'Fact Check Output: {fact_check}')
