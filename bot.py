@@ -32,7 +32,7 @@ def launch_deepfake_job(mention: ValidMention) -> None:
 
     # launch a poller job to update with tweet (modal function launch)
     logging.info(f"Launching poller(job_id={job_id})...")
-    poller = Function.lookup("cap-poller", "poller")
+    poller = Function.lookup("cap-jobs", "poller")
     poller.spawn(job_id, mention_tweet.id)
 
 def launch_fact_check_job(mention: ValidMention) -> None:
@@ -44,7 +44,7 @@ def launch_fact_check_job(mention: ValidMention) -> None:
     # the tweet to respond to
     mention_tweet_id = mention.mention.di
 
-    verity_job = Function.lookup("cap-poller", "verity_job")
+    verity_job = Function.lookup("cap-jobs", "verity_job")
     verity_job.spawn(parent_tweet_id, mention_tweet_id)
 
 start_time = datetime.now(tz=pytz.utc)
