@@ -24,12 +24,12 @@ stub = Stub(
     "cap-jobs",
     image=image,
     secrets=(
-        Secret.from_dotenv(".env.prod"),
+        Secret.from_dotenv(".env"),
     ),
 )
 
 @stub.function(timeout=DEFAULT_TIMEOUT)
-def verity_job(tweet_id: str, mention_tweet_id: str):
+async def verity_job(tweet_id: str, mention_tweet_id: str):
     print("Transcribing...")
     transcription = twitter_transcribe(tweet_id)
     print(f"Transcription Result: {transcription}\n----------")
