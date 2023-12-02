@@ -29,7 +29,7 @@ stub = Stub(
 )
 
 @stub.function(timeout=DEFAULT_TIMEOUT)
-def verity_job(tweet_id: int):
+def verity_job(tweet_id: str, mention_tweet_id: str):
     print("Transcribing...")
     transcription = twitter_transcribe(tweet_id)
     print(f"Transcription Result: {transcription}\n----------")
@@ -41,7 +41,7 @@ def verity_job(tweet_id: int):
     return fact_check
 
 @stub.function(timeout=DEFAULT_TIMEOUT)
-async def poller(id: str, mention_tweet_id: int):
+async def poller(id: str, mention_tweet_id: str):
     logging.info("Capper poller starting...")
     then = datetime.now()
     cap = CapClient()
