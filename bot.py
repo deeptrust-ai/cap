@@ -42,7 +42,7 @@ def launch_fact_check_job(mention: ValidMention) -> None:
     parent_tweet_id = mention.parent_tweet.data.id
 
     # the tweet to respond to
-    mention_tweet_id = mention.mention.di
+    mention_tweet_id = mention.mention.id
 
     verity_job = Function.lookup("cap-jobs", "verity_job")
     verity_job.spawn(parent_tweet_id, mention_tweet_id)
