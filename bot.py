@@ -35,6 +35,17 @@ def launch_deepfake_job(mention: ValidMention) -> None:
     poller = Function.lookup("cap-poller", "poller")
     poller.spawn(job_id, mention_tweet.id)
 
+def launch_fact_check_job(mention: ValidMention) -> None:
+    logging.info(f"Launching a fact check job for mention(id{mention.mention.id})...")
+
+    # the tweet to analyze
+    parent_tweet_id = mention.parent_tweet.data.id
+
+    # the tweet to respond to
+    mention_tweet_id = mention.mention.di
+
+    verity_job = Function.lookup("cap-poller", "verity_job")
+    verity_job.spawn(parent_tweet_id, mention_tweet_id)
 
 start_time = datetime.now(tz=pytz.utc)
 while True:
@@ -60,7 +71,7 @@ while True:
             print(
                 f"Starting factcheck job for mention(tweet_id={mention.mention.id})..."
             )
-            # TODO: Add factcheck job
+            launch_fact_check_job(mention)
 
     # update start time
     start_time = datetime.now(tz=pytz.utc)
