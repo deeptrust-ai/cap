@@ -3,6 +3,7 @@ import logging
 
 from modal import functions, Image, Stub, Secret
 
+from api import twitter_transcribe, verity
 from cap import CapClient
 from heatmap import create_heatmap, delete_heatmap
 
@@ -26,6 +27,18 @@ stub = Stub(
         Secret.from_dotenv(".env.prod"),
     ),
 )
+
+@stub.function(timeout=DEFAULT_TIMEOUT)
+def verity_job(tweet_id: int):
+    print("Transcribing...")
+    transcription = twitter_transcribe(tweet_id)
+    print(f"Transcription Result: {transcription}\n----------")
+    print("Fact checking...")
+    fact_check = verity(tweet_id, transcription)
+
+    print(f'Fact Check Output: {fact_check}')
+
+    return fact_check
 
 @stub.function(timeout=DEFAULT_TIMEOUT)
 async def poller(id: str, mention_tweet_id: int):
