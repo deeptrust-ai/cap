@@ -20,6 +20,7 @@ logging.info("Capper Checker starting...")
 
 def launch_deepfake_job(mention: ValidMention) -> None:
     # will launch a modal job to fact check tweet (API request)
+    # TODO: Use api to launch tweet job
     logging.info(
         f"Launching twitter predict job for mention(id={mention.mention.id})..."
     )
@@ -31,9 +32,20 @@ def launch_deepfake_job(mention: ValidMention) -> None:
 
     # launch a poller job to update with tweet (modal function launch)
     logging.info(f"Launching poller(job_id={job_id})...")
-    poller = Function.lookup("cap-poller", "poller")
+    poller = Function.lookup("cap-jobs", "poller")
     poller.spawn(job_id, mention_tweet.id)
 
+def launch_fact_check_job(mention: ValidMention) -> None:
+    logging.info(f"Launching a fact check job for mention(id{mention.mention.id})...")
+
+    # the tweet to analyze
+    parent_tweet_id = mention.parent_tweet.data.id
+
+    # the tweet to respond to
+    mention_tweet_id = mention.mention.di
+
+    verity_job = Function.lookup("cap-jobs", "verity_job")
+    verity_job.spawn(parent_tweet_id, mention_tweet_id)
 
 start_time = datetime.now(tz=pytz.utc)
 while True:
@@ -59,7 +71,7 @@ while True:
             print(
                 f"Starting factcheck job for mention(tweet_id={mention.mention.id})..."
             )
-            # TODO: Add factcheck job
+            launch_fact_check_job(mention)
 
     # update start time
     start_time = datetime.now(tz=pytz.utc)
